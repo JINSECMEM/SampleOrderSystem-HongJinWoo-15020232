@@ -39,15 +39,13 @@ void AppController::Run() {
 void AppController::HandleMenu(int choice) {
     Tick();
     switch (choice) {
-    case 1: sampleCtrl_.Register();       break;
-    case 2: sampleCtrl_.FindById();       break;
-    case 3: sampleCtrl_.Search();         break;
-    case 4: orderCtrl_.PlaceOrder();      break;
-    case 5: orderCtrl_.ProcessPending();  break;
-    case 6: ShowMonitor();                break;
-    case 7: prodCtrl_.ShowProduction();   break;
-    case 8: releaseCtrl_.ProcessRelease(); break;
-    case 0: running_ = false;             break;
+    case 1: sampleCtrl_.RunMenu();         break;
+    case 2: orderCtrl_.PlaceOrder();       break;
+    case 3: orderCtrl_.ProcessPending();   break;
+    case 4: ShowMonitor();                 break;
+    case 5: prodCtrl_.ShowProduction();    break;
+    case 6: releaseCtrl_.ProcessRelease(); break;
+    case 0: running_ = false;              break;
     default:
         std::cout << "\n  잘못된 선택입니다.\n";
         ConsoleHelper::Pause();
