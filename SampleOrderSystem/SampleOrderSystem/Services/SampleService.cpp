@@ -21,9 +21,24 @@ std::vector<Sample> SampleService::FindAll() {
 
 std::vector<Sample> SampleService::SearchByName(const std::string& keyword) {
     std::vector<Sample> result;
-    for (const auto& s : repo_.FindAll()) {
+    for (const auto& s : repo_.FindAll())
         if (s.name.find(keyword) != std::string::npos)
             result.push_back(s);
-    }
+    return result;
+}
+
+std::vector<Sample> SampleService::SearchByMaxTime(int maxTime) {
+    std::vector<Sample> result;
+    for (const auto& s : repo_.FindAll())
+        if (s.avg_production_time <= maxTime)
+            result.push_back(s);
+    return result;
+}
+
+std::vector<Sample> SampleService::SearchByMinYield(double minYield) {
+    std::vector<Sample> result;
+    for (const auto& s : repo_.FindAll())
+        if (s.yield_rate >= minYield)
+            result.push_back(s);
     return result;
 }

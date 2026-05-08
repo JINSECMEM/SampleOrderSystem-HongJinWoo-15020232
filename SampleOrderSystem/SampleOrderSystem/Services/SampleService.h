@@ -11,6 +11,8 @@ public:
     std::optional<Sample>     FindById(int id);
     std::vector<Sample>       FindAll();
     std::vector<Sample>       SearchByName(const std::string& keyword);
+    std::vector<Sample>       SearchByMaxTime(int maxTime);
+    std::vector<Sample>       SearchByMinYield(double minYield);
 private:
     ISampleRepository& repo_;
 };

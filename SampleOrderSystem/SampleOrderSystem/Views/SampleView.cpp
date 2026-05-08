@@ -26,12 +26,15 @@ static void printRow(const Sample& s) {
               << '\n';
 }
 
-void SampleView::PrintList(const std::vector<Sample>& samples) {
-    std::cout << "\n[시료 목록]\n";
+void SampleView::DisplayList(const std::vector<Sample>& samples) {
+    std::cout << "\n[시료 목록 — 총 " << samples.size() << "개]\n";
     printHeader();
     for (const auto& s : samples) printRow(s);
     ConsoleHelper::PrintDivider('-', 45);
-    std::cout << "총 " << samples.size() << "개\n";
+}
+
+void SampleView::PrintList(const std::vector<Sample>& samples) {
+    DisplayList(samples);
     ConsoleHelper::Pause();
 }
 
@@ -85,8 +88,22 @@ int SampleView::GetIdInput() {
 }
 
 std::string SampleView::GetKeywordInput() {
-    std::cout << "검색 키워드 입력: ";
+    std::cout << "이름 검색어 입력: ";
     std::string kw;
     std::getline(std::cin, kw);
     return kw;
+}
+
+int SampleView::GetMaxTimeInput() {
+    std::cout << "최대 생산시간(분) 입력: ";
+    int v; std::cin >> v;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return v;
+}
+
+double SampleView::GetMinYieldInput() {
+    std::cout << "최소 수율 입력(0.0~1.0): ";
+    double v; std::cin >> v;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return v;
 }

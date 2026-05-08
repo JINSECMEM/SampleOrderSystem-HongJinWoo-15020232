@@ -51,8 +51,44 @@ void SampleController::Register() {
 }
 
 void SampleController::Search() {
-    std::string kw = view_.GetKeywordInput();
-    view_.PrintSearchResult(sampleSvc_.SearchByName(kw));
+    while (true) {
+        ConsoleHelper::ClearScreen();
+        view_.DisplayList(sampleSvc_.FindAll());
+
+        std::cout << "\n[검색 조건 선택]\n"
+                  << "1. 이름으로 검색\n"
+                  << "2. 생산시간으로 검색 (N분 이하)\n"
+                  << "3. 수율로 검색 (N% 이상)\n"
+                  << "0. 뒤로\n";
+        ConsoleHelper::PrintDivider();
+        std::cout << "메뉴 선택: ";
+
+        int ch;
+        std::cin >> ch;
+        if (std::cin.fail()) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            continue;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        switch (ch) {
+        case 1:
+            view_.PrintSearchResult(sampleSvc_.SearchByName(view_.GetKeywordInput()));
+            break;
+        case 2:
+            view_.PrintSearchResult(sampleSvc_.SearchByMaxTime(view_.GetMaxTimeInput()));
+            break;
+        case 3:
+            view_.PrintSearchResult(sampleSvc_.SearchByMinYield(view_.GetMinYieldInput()));
+            break;
+        case 0: return;
+        default:
+            std::cout << "  잘못된 선택입니다.\n";
+            ConsoleHelper::Pause();
+            break;
+        }
+    }
 }
 
 void SampleController::ListAll() {
