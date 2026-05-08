@@ -42,11 +42,17 @@ void SampleController::RunMenu() {
 }
 
 void SampleController::Register() {
-    std::string name   = view_.GetNameInput();
-    int avgTime        = view_.GetAvgTimeInput();
-    double yieldRate   = view_.GetYieldRateInput();
-    Sample s = sampleSvc_.Register(name, avgTime, yieldRate);
-    std::cout << "  시료 등록 완료 — ID: " << s.id << "\n";
+    std::string name  = view_.GetNameInput();
+    int avgTime       = view_.GetAvgTimeInput();
+    double yieldRate  = view_.GetYieldRateInput();
+    auto result = sampleSvc_.Register(name, avgTime, yieldRate);
+    if (!result) {
+        std::cout << "  등록 실패: '" << name << "'은(는) 이미 등록된 시료입니다.\n";
+        ConsoleHelper::Pause();
+        return;
+    }
+    std::cout << "  시료 등록 완료 — ID: " << result->id << "\n\n";
+    view_.DisplayList(sampleSvc_.FindAll());
     ConsoleHelper::Pause();
 }
 

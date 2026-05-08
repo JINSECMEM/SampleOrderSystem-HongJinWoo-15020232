@@ -3,7 +3,9 @@
 
 SampleService::SampleService(ISampleRepository& repo) : repo_(repo) {}
 
-Sample SampleService::Register(const std::string& name, int avgTime, double yieldRate) {
+std::optional<Sample> SampleService::Register(const std::string& name, int avgTime, double yieldRate) {
+    for (const auto& s : repo_.FindAll())
+        if (s.name == name) return std::nullopt;
     Sample s;
     s.name                  = name;
     s.avg_production_time   = avgTime;

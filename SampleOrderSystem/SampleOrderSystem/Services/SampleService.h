@@ -7,7 +7,7 @@
 class SampleService {
 public:
     explicit SampleService(ISampleRepository& repo);
-    Sample                    Register(const std::string& name, int avgTime, double yieldRate);
+    std::optional<Sample>     Register(const std::string& name, int avgTime, double yieldRate);
     std::optional<Sample>     FindById(int id);
     std::vector<Sample>       FindAll();
     std::vector<Sample>       SearchByName(const std::string& keyword);
