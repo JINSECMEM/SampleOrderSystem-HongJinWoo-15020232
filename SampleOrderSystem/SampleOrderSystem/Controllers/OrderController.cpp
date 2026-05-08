@@ -16,9 +16,9 @@ void OrderController::PlaceOrder() {
         return;
     }
     OrderInput input = view_.GetOrderInput(samples);
-    Order o = orderSvc_.PlaceOrder(input.sample_id, input.quantity);
-    log_("주문 접수 — ID: " + std::to_string(o.id));
-    std::cout << "  주문 접수 완료 — ID: " << o.id << "\n";
+    Order o = orderSvc_.PlaceOrder(input.sample_id, input.quantity, input.customer_name);
+    log_("주문 접수 — ID: " + std::to_string(o.id) + "  고객사: " + o.customer_name);
+    std::cout << "  주문 접수 완료 — ID: " << o.id << "  고객사: " << o.customer_name << "\n";
     ConsoleHelper::Pause();
 }
 

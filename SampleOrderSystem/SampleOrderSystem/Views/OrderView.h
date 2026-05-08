@@ -4,8 +4,9 @@
 #include "../Models/Sample.h"
 
 struct OrderInput {
-    int sample_id = 0;
-    int quantity  = 0;
+    int         sample_id = 0;
+    int         quantity  = 0;
+    std::string customer_name;
 };
 
 struct ApprovalInput {

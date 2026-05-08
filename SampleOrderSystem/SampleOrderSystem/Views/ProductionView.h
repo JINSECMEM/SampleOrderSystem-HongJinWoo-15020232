@@ -3,10 +3,12 @@
 #include <optional>
 #include "../Models/ProductionJob.h"
 #include "../Models/Sample.h"
+#include "../Models/Order.h"
 
 class ProductionView {
 public:
     void Render(const std::optional<ProductionJob>& running,
                 const std::vector<ProductionJob>& queued,
-                const std::vector<Sample>& samples);
+                const std::vector<Sample>& samples,
+                const std::vector<Order>& orders);
 };

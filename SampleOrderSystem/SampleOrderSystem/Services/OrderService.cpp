@@ -3,13 +3,14 @@
 
 OrderService::OrderService(IOrderRepository& repo) : repo_(repo) {}
 
-Order OrderService::PlaceOrder(int sampleId, int qty) {
+Order OrderService::PlaceOrder(int sampleId, int qty, const std::string& customerName) {
     Order o;
-    o.sample_id  = sampleId;
-    o.quantity   = qty;
-    o.status     = OrderStatus::RESERVED;
-    o.created_at = GetTimestamp();
-    o.updated_at = GetTimestamp();
+    o.sample_id     = sampleId;
+    o.quantity      = qty;
+    o.customer_name = customerName;
+    o.status        = OrderStatus::RESERVED;
+    o.created_at    = GetTimestamp();
+    o.updated_at    = GetTimestamp();
     return repo_.Save(o);
 }
 

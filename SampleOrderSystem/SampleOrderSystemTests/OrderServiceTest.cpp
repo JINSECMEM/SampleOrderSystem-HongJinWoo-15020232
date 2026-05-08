@@ -15,7 +15,7 @@ TEST(OrderServiceTest, PlaceOrder_ReturnsSavedOrderWithReservedStatus) {
     EXPECT_CALL(repo, Save(_)).WillOnce(Return(saved));
 
     OrderService svc(repo);
-    Order result = svc.PlaceOrder(2, 10);
+    Order result = svc.PlaceOrder(2, 10, "TestCo");
     EXPECT_EQ(result.id, 1);
     EXPECT_EQ(result.status, OrderStatus::RESERVED);
 }
@@ -42,7 +42,7 @@ TEST(OrderServiceTest, UpdateStatus_ToConfirmed) {
 
 TEST(OrderServiceTest, FindByStatus_DelegatesToRepo) {
     MockOrderRepository repo;
-    std::vector<Order> reserved = { {1, 1, 5, OrderStatus::RESERVED} };
+    std::vector<Order> reserved = { {1, 1, 5, "", OrderStatus::RESERVED} };
     EXPECT_CALL(repo, FindByStatus(OrderStatus::RESERVED)).WillOnce(Return(reserved));
 
     OrderService svc(repo);

@@ -44,7 +44,7 @@ TEST(ReleaseServiceTest, GetConfirmedOrders_DelegatesToRepo) {
     MockInventoryRepository invRepo;
     InventoryService invSvc(invRepo);
 
-    std::vector<Order> confirmed = { {1, 1, 10, OrderStatus::CONFIRMED} };
+    std::vector<Order> confirmed = { {1, 1, 10, "", OrderStatus::CONFIRMED} };
     EXPECT_CALL(ordRepo, FindByStatus(OrderStatus::CONFIRMED)).WillOnce(Return(confirmed));
 
     ReleaseService svc(ordRepo, invSvc);

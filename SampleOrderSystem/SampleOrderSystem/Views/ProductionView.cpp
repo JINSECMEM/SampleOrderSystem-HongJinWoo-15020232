@@ -4,9 +4,16 @@
 #include <iostream>
 #include <iomanip>
 
+static std::string findCustomerName(int orderId, const std::vector<Order>& orders) {
+    for (const auto& o : orders)
+        if (o.id == orderId) return o.customer_name;
+    return "?";
+}
+
 void ProductionView::Render(const std::optional<ProductionJob>& running,
                              const std::vector<ProductionJob>& queued,
-                             const std::vector<Sample>& samples) {
+                             const std::vector<Sample>& samples,
+                             const std::vector<Order>& orders) {
     std::cout << "\n[생산 라인]\n";
     ConsoleHelper::PrintDivider('=', 50);
 
@@ -19,6 +26,7 @@ void ProductionView::Render(const std::optional<ProductionJob>& running,
                   ? (j.elapsed_min * 100 / j.total_time_min)
                   : 100;
         std::cout << "  주문 ID     : " << j.order_id << '\n'
+                  << "  고객사      : " << findCustomerName(j.order_id, orders) << '\n'
                   << "  시료        : " << ViewHelper::FindSampleName(j.sample_id, samples) << '\n'
                   << "  목표 수량   : " << j.target_qty << " 개\n"
                   << "  생산량      : " << j.produced_qty << " 개\n"
@@ -36,6 +44,7 @@ void ProductionView::Render(const std::optional<ProductionJob>& running,
         int rank = 1;
         for (const auto& j : queued)
             std::cout << "  " << rank++ << ". 주문 " << j.order_id
+                      << "  [" << findCustomerName(j.order_id, orders) << "]"
                       << "  " << ViewHelper::FindSampleName(j.sample_id, samples)
                       << " x" << j.target_qty
                       << "  (총 " << j.total_time_min << " min)\n";

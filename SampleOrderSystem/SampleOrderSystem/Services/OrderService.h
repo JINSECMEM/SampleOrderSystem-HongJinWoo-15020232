@@ -5,7 +5,7 @@
 class OrderService {
 public:
     explicit OrderService(IOrderRepository& repo);
-    Order               PlaceOrder(int sampleId, int qty);
+    Order               PlaceOrder(int sampleId, int qty, const std::string& customerName);
     void                Reject(int orderId);
     void                UpdateStatus(int orderId, OrderStatus status);
     Order               FindById(int orderId);

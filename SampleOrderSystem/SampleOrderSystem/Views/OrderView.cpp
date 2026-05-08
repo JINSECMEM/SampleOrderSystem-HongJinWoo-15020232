@@ -10,21 +10,23 @@ void OrderView::PrintList(const std::vector<Order>& orders, const std::vector<Sa
     ConsoleHelper::SetColor(ConsoleHelper::COLOR_CYAN);
     std::cout << std::left
               << std::setw(5)  << "ID"
+              << std::setw(14) << "고객사"
               << std::setw(14) << "시료"
-              << std::setw(8)  << "수량"
+              << std::setw(6)  << "수량"
               << std::setw(12) << "상태"
               << "접수일시\n";
     ConsoleHelper::ResetColor();
-    ConsoleHelper::PrintDivider('-', 55);
+    ConsoleHelper::PrintDivider('-', 67);
     for (const auto& o : orders) {
         std::cout << std::left
                   << std::setw(5)  << o.id
+                  << std::setw(14) << o.customer_name
                   << std::setw(14) << ViewHelper::FindSampleName(o.sample_id, samples)
-                  << std::setw(8)  << o.quantity
+                  << std::setw(6)  << o.quantity
                   << std::setw(12) << OrderStatusStr(o.status)
                   << o.created_at << '\n';
     }
-    ConsoleHelper::PrintDivider('-', 55);
+    ConsoleHelper::PrintDivider('-', 67);
 }
 
 OrderInput OrderView::GetOrderInput(const std::vector<Sample>& samples) {
@@ -34,6 +36,8 @@ OrderInput OrderView::GetOrderInput(const std::vector<Sample>& samples) {
         std::cout << "  [" << s.id << "] " << s.name << '\n';
 
     OrderInput input;
+    std::cout << "고객사명 입력: ";
+    std::getline(std::cin, input.customer_name);
     std::cout << "시료 ID 선택: ";
     std::cin >> input.sample_id;
     std::cout << "주문 수량 입력: ";
@@ -47,7 +51,8 @@ ApprovalInput OrderView::GetApprovalInput(const std::vector<Order>& reserved,
     std::cout << "\n[승인 대기 주문]\n";
     ConsoleHelper::PrintDivider('-', 40);
     for (const auto& o : reserved)
-        std::cout << "  [" << o.id << "] " << ViewHelper::FindSampleName(o.sample_id, samples)
+        std::cout << "  [" << o.id << "] " << o.customer_name
+                  << " | " << ViewHelper::FindSampleName(o.sample_id, samples)
                   << " x" << o.quantity << "  (" << o.created_at << ")\n";
     ConsoleHelper::PrintDivider('-', 40);
 

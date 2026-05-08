@@ -15,10 +15,11 @@ inline const char* OrderStatusStr(OrderStatus s) {
 }
 
 struct Order {
-    int         id        = 0;
-    int         sample_id = 0;
-    int         quantity  = 0;
-    OrderStatus status    = OrderStatus::RESERVED;
+    int         id            = 0;
+    int         sample_id     = 0;
+    int         quantity      = 0;
+    std::string customer_name;
+    OrderStatus status        = OrderStatus::RESERVED;
     std::string created_at;
     std::string updated_at;
 };

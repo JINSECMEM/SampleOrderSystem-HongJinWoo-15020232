@@ -12,7 +12,7 @@ AppController::AppController()
     , sampleCtrl_(sampleSvc_, invSvc_, sampleView_)
     , orderCtrl_(orderSvc_, sampleSvc_, invSvc_, prodSvc_, orderView_,
                  [this](const std::string& msg) { AddLog(msg); })
-    , prodCtrl_(prodSvc_, sampleSvc_, prodView_)
+    , prodCtrl_(prodSvc_, sampleSvc_, orderSvc_, prodView_)
     , releaseCtrl_(relSvc_, sampleSvc_, releaseView_,
                    [this](const std::string& msg) { AddLog(msg); })
 {
