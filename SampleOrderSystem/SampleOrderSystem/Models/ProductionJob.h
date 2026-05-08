@@ -8,6 +8,7 @@ struct ProductionJob {
     int         id            = 0;
     int         order_id      = 0;
     int         sample_id     = 0;
+    int         line_id       = 0;   // 0 = 미배정
     int         target_qty    = 0;
     int         produced_qty  = 0;
     int         total_time_min = 0;

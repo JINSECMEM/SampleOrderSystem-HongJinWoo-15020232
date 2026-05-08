@@ -70,8 +70,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\SampleOrderSystem\Database\ProductionLineRepository.cpp" />
     <ClCompile Include="..\SampleOrderSystem\Services\InventoryService.cpp" />
     <ClCompile Include="..\SampleOrderSystem\Services\OrderService.cpp" />
+    <ClCompile Include="..\SampleOrderSystem\Services\ProductionLineService.cpp" />
     <ClCompile Include="..\SampleOrderSystem\Services\ProductionService.cpp" />
     <ClCompile Include="..\SampleOrderSystem\Services\ReleaseService.cpp" />
     <ClCompile Include="..\SampleOrderSystem\Services\SampleService.cpp" />

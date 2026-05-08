@@ -33,7 +33,7 @@ static WORD statusColor(OrderStatus s) {
 void MonitorView::Render(const std::vector<Order>& orders,
                           const std::vector<Inventory>& inventories,
                           const std::vector<Sample>& samples,
-                          const std::optional<ProductionJob>& running,
+                          const std::vector<ProductionJob>& runningJobs,
                           const std::vector<ProductionJob>& queued) {
     ConsoleHelper::SetColor(ConsoleHelper::COLOR_WHITE);
     std::cout << "========== 모니터링 대시보드 ==========\n";
@@ -103,23 +103,20 @@ void MonitorView::Render(const std::vector<Order>& orders,
     std::cout << "\n[생산 라인]\n";
     ConsoleHelper::PrintDivider('-', 67);
 
-    std::cout << "  현재 생산 중: ";
-    if (!running) {
-        std::cout << "유휴\n";
+    if (runningJobs.empty()) {
+        std::cout << "  현재 생산 중: 유휴\n";
     } else {
-        const auto& j = *running;
-        int pct = (j.total_time_min > 0)
-                  ? std::min(100, j.elapsed_min * 100 / j.total_time_min)
-                  : 100;
-        std::cout << '\n'
-                  << "    주문 " << j.order_id
-                  << "  |  고객사: " << findCustomer(j.order_id, orders)
-                  << "  |  시료: " << ViewHelper::FindSampleName(j.sample_id, samples)
-                  << "  |  목표: " << j.target_qty << "개\n"
-                  << "    진행: ";
-        ConsoleHelper::SetColor(ConsoleHelper::COLOR_GREEN);
-        std::cout << pct << "% (" << j.elapsed_min << " / " << j.total_time_min << " sec)\n";
-        ConsoleHelper::ResetColor();
+        for (const auto& j : runningJobs) {
+            int pct = (j.total_time_min > 0)
+                      ? std::min(100, j.elapsed_min * 100 / j.total_time_min) : 100;
+            std::cout << "  라인 " << j.line_id << " | 주문 " << j.order_id
+                      << "  |  " << findCustomer(j.order_id, orders)
+                      << "  |  " << ViewHelper::FindSampleName(j.sample_id, samples)
+                      << "  |  목표: " << j.target_qty << "개  |  진행: ";
+            ConsoleHelper::SetColor(ConsoleHelper::COLOR_GREEN);
+            std::cout << pct << "%\n";
+            ConsoleHelper::ResetColor();
+        }
     }
 
     std::cout << "\n  대기 큐 — " << queued.size() << "건\n";

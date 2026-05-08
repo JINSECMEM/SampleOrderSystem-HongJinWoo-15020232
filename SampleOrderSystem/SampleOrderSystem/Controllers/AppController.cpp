@@ -7,12 +7,13 @@ AppController::AppController()
     : sampleSvc_(sampleRepo_)
     , orderSvc_(orderRepo_)
     , invSvc_(invRepo_)
-    , prodSvc_(prodRepo_)
+    , prodSvc_(prodRepo_, lineRepo_)
+    , lineSvc_(lineRepo_, prodRepo_)
     , relSvc_(orderRepo_, invSvc_)
     , sampleCtrl_(sampleSvc_, invSvc_, sampleView_)
     , orderCtrl_(orderSvc_, sampleSvc_, invSvc_, prodSvc_, orderView_,
                  [this](const std::string& msg) { AddLog(msg); })
-    , prodCtrl_(prodSvc_, sampleSvc_, orderSvc_, prodView_)
+    , prodCtrl_(prodSvc_, lineSvc_, sampleSvc_, orderSvc_, prodView_, lineView_)
     , releaseCtrl_(relSvc_, sampleSvc_, releaseView_,
                    [this](const std::string& msg) { AddLog(msg); })
 {
@@ -60,7 +61,7 @@ void AppController::ShowMonitor() {
         orderSvc_.FindAll(),
         invSvc_.GetAll(),
         sampleSvc_.FindAll(),
-        prodSvc_.GetRunningJob(),
+        prodSvc_.GetAllRunningJobs(),
         prodSvc_.GetQueuedJobs());
 }
 

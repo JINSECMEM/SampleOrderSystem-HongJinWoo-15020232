@@ -13,6 +13,6 @@ public:
     void Render(const std::vector<Order>& orders,
                 const std::vector<Inventory>& inventories,
                 const std::vector<Sample>& samples,
-                const std::optional<ProductionJob>& running,
+                const std::vector<ProductionJob>& runningJobs,
                 const std::vector<ProductionJob>& queued);
 };
