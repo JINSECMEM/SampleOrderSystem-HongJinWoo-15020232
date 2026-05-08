@@ -1,18 +1,24 @@
 #include "MonitorView.h"
 #include "ConsoleHelper.h"
+#include "ViewHelper.h"
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <unordered_map>
 
-static std::string sampleName(int sampleId, const std::vector<Sample>& samples) {
-    for (const auto& s : samples)
-        if (s.id == sampleId) return s.name;
-    return "?";
-}
+static constexpr int RECENT_LOG_LINES = 5;
 
 static int countByStatus(const std::vector<Order>& orders, OrderStatus status) {
     return static_cast<int>(std::count_if(orders.begin(), orders.end(),
         [status](const Order& o) { return o.status == status; }));
+}
+
+struct InventoryDisplayStatus { std::string label; WORD color; };
+
+static InventoryDisplayStatus GetInventoryDisplayStatus(int qty, int demandQty) {
+    if (qty == 0)        return {"고갈", ConsoleHelper::COLOR_RED};
+    if (qty < demandQty) return {"부족", ConsoleHelper::COLOR_YELLOW};
+    return                      {"여유", ConsoleHelper::COLOR_GREEN};
 }
 
 void MonitorView::Render(const std::vector<Order>& orders,
@@ -26,7 +32,6 @@ void MonitorView::Render(const std::vector<Order>& orders,
     std::cout << "========== 모니터링 대시보드 ==========\n";
     ConsoleHelper::ResetColor();
 
-    // 주문 현황
     std::cout << "\n[주문 현황]\n";
     ConsoleHelper::PrintDivider('-', 50);
     std::cout << std::left
@@ -39,7 +44,11 @@ void MonitorView::Render(const std::vector<Order>& orders,
               << std::setw(12) << countByStatus(orders, OrderStatus::PRODUCING)
               << std::setw(12) << countByStatus(orders, OrderStatus::RELEASE) << '\n';
 
-    // 재고 현황
+    std::unordered_map<int, int> demandMap;
+    for (const auto& o : orders)
+        if (o.status == OrderStatus::RESERVED || o.status == OrderStatus::PRODUCING)
+            demandMap[o.sample_id] += o.quantity;
+
     std::cout << "\n[재고 현황]\n";
     ConsoleHelper::PrintDivider('-', 50);
     std::cout << std::left
@@ -50,41 +59,27 @@ void MonitorView::Render(const std::vector<Order>& orders,
     ConsoleHelper::PrintDivider('-', 50);
 
     for (const auto& inv : inventories) {
-        std::string status;
-        WORD color = ConsoleHelper::COLOR_DEFAULT;
-        if (inv.quantity == 0) {
-            status = "고갈"; color = ConsoleHelper::COLOR_RED;
-        } else {
-            // 해당 시료 RESERVED+PRODUCING 주문 수량 합산과 비교
-            int demandQty = 0;
-            for (const auto& o : orders)
-                if (o.sample_id == inv.sample_id &&
-                    (o.status == OrderStatus::RESERVED || o.status == OrderStatus::PRODUCING))
-                    demandQty += o.quantity;
-            if (inv.quantity < demandQty) { status = "부족"; color = ConsoleHelper::COLOR_YELLOW; }
-            else                          { status = "여유"; color = ConsoleHelper::COLOR_GREEN; }
-        }
+        auto it = demandMap.find(inv.sample_id);
+        int demand = (it != demandMap.end()) ? it->second : 0;
+        auto [label, color] = GetInventoryDisplayStatus(inv.quantity, demand);
         std::cout << std::left
                   << std::setw(5)  << inv.sample_id
-                  << std::setw(14) << sampleName(inv.sample_id, samples)
+                  << std::setw(14) << ViewHelper::FindSampleName(inv.sample_id, samples)
                   << std::setw(8)  << inv.quantity;
         ConsoleHelper::SetColor(color);
-        std::cout << status << '\n';
+        std::cout << label << '\n';
         ConsoleHelper::ResetColor();
     }
 
-    // 생산 라인 요약
     std::cout << "\n[생산 라인] ";
     if (running) std::cout << "생산 중: 주문 " << running->order_id
                            << " (" << running->elapsed_min << "/" << running->total_time_min << " min)";
     else         std::cout << "유휴";
     std::cout << "  |  대기: " << queued.size() << "건\n";
 
-    // 이벤트 로그 (최근 5줄)
     std::cout << "\n[이벤트 로그]\n";
     ConsoleHelper::PrintDivider('-', 60);
-    int start = static_cast<int>(eventLog.size()) - 5;
-    if (start < 0) start = 0;
+    int start = std::max(0, static_cast<int>(eventLog.size()) - RECENT_LOG_LINES);
     for (int i = start; i < static_cast<int>(eventLog.size()); ++i)
         std::cout << eventLog[i] << '\n';
 

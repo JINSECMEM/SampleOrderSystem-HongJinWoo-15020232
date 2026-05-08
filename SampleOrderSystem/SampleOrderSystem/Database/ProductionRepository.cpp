@@ -25,7 +25,7 @@ void ProductionRepository::UpdateJob(const ProductionJob& j) {
 }
 
 std::optional<ProductionJob> ProductionRepository::FindNextQueued() {
-    for (const auto& [id, j] : store_)  // map is sorted by id = FIFO
+    for (const auto& [id, j] : store_)
         if (j.status == JobStatus::QUEUED) return j;
     return std::nullopt;
 }

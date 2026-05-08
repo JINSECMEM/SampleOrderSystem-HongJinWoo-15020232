@@ -71,6 +71,7 @@ void AppController::Tick() {
 
 void AppController::AddLog(const std::string& msg) {
     eventLog_.push_back("[" + GetTimestamp() + "] " + msg);
-    if (eventLog_.size() > 100)
+    static constexpr size_t MAX_EVENT_LOG_SIZE = 100;
+    if (eventLog_.size() > MAX_EVENT_LOG_SIZE)
         eventLog_.erase(eventLog_.begin());
 }

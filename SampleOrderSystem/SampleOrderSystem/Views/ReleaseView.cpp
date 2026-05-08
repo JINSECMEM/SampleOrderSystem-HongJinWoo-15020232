@@ -1,14 +1,9 @@
 #include "ReleaseView.h"
 #include "ConsoleHelper.h"
+#include "ViewHelper.h"
 #include <iostream>
 #include <iomanip>
 #include <limits>
-
-static std::string sampleName(int sampleId, const std::vector<Sample>& samples) {
-    for (const auto& s : samples)
-        if (s.id == sampleId) return s.name;
-    return "?";
-}
 
 void ReleaseView::PrintConfirmedOrders(const std::vector<Order>& orders,
                                         const std::vector<Sample>& samples) {
@@ -24,7 +19,7 @@ void ReleaseView::PrintConfirmedOrders(const std::vector<Order>& orders,
     for (const auto& o : orders)
         std::cout << std::left
                   << std::setw(5)  << o.id
-                  << std::setw(14) << sampleName(o.sample_id, samples)
+                  << std::setw(14) << ViewHelper::FindSampleName(o.sample_id, samples)
                   << std::setw(8)  << o.quantity
                   << o.updated_at << '\n';
     ConsoleHelper::PrintDivider('-', 45);

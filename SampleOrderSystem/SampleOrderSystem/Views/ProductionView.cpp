@@ -1,13 +1,8 @@
 #include "ProductionView.h"
 #include "ConsoleHelper.h"
+#include "ViewHelper.h"
 #include <iostream>
 #include <iomanip>
-
-static std::string sampleName(int sampleId, const std::vector<Sample>& samples) {
-    for (const auto& s : samples)
-        if (s.id == sampleId) return s.name;
-    return "?";
-}
 
 void ProductionView::Render(const std::optional<ProductionJob>& running,
                              const std::vector<ProductionJob>& queued,
@@ -24,7 +19,7 @@ void ProductionView::Render(const std::optional<ProductionJob>& running,
                   ? (j.elapsed_min * 100 / j.total_time_min)
                   : 100;
         std::cout << "  주문 ID     : " << j.order_id << '\n'
-                  << "  시료        : " << sampleName(j.sample_id, samples) << '\n'
+                  << "  시료        : " << ViewHelper::FindSampleName(j.sample_id, samples) << '\n'
                   << "  목표 수량   : " << j.target_qty << " 개\n"
                   << "  생산량      : " << j.produced_qty << " 개\n"
                   << "  진행        : ";
@@ -41,7 +36,7 @@ void ProductionView::Render(const std::optional<ProductionJob>& running,
         int rank = 1;
         for (const auto& j : queued)
             std::cout << "  " << rank++ << ". 주문 " << j.order_id
-                      << "  " << sampleName(j.sample_id, samples)
+                      << "  " << ViewHelper::FindSampleName(j.sample_id, samples)
                       << " x" << j.target_qty
                       << "  (총 " << j.total_time_min << " min)\n";
     }

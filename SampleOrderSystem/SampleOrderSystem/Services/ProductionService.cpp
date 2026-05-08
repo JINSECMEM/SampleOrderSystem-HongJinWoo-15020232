@@ -10,7 +10,7 @@ void ProductionService::SetOnCompleteCallback(OnCompleteCallback cb) {
 
 ProductionJob ProductionService::Enqueue(int orderId, int sampleId,
                                          int shortage, double yieldRate, int avgProdTime) {
-    int actualQty   = static_cast<int>(std::ceil(shortage / (yieldRate * 0.9)));
+    int actualQty   = static_cast<int>(std::ceil(shortage / (yieldRate * PRODUCTION_SAFETY_MARGIN)));
     int totalTime   = avgProdTime * actualQty;
 
     ProductionJob j;

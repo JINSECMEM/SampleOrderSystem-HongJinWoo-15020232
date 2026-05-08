@@ -1,14 +1,9 @@
 #include "OrderView.h"
 #include "ConsoleHelper.h"
+#include "ViewHelper.h"
 #include <iostream>
 #include <iomanip>
 #include <limits>
-
-static std::string sampleName(int sampleId, const std::vector<Sample>& samples) {
-    for (const auto& s : samples)
-        if (s.id == sampleId) return s.name;
-    return "?";
-}
 
 void OrderView::PrintList(const std::vector<Order>& orders, const std::vector<Sample>& samples) {
     std::cout << "\n[주문 목록]\n";
@@ -24,7 +19,7 @@ void OrderView::PrintList(const std::vector<Order>& orders, const std::vector<Sa
     for (const auto& o : orders) {
         std::cout << std::left
                   << std::setw(5)  << o.id
-                  << std::setw(14) << sampleName(o.sample_id, samples)
+                  << std::setw(14) << ViewHelper::FindSampleName(o.sample_id, samples)
                   << std::setw(8)  << o.quantity
                   << std::setw(12) << OrderStatusStr(o.status)
                   << o.created_at << '\n';
@@ -52,7 +47,7 @@ ApprovalInput OrderView::GetApprovalInput(const std::vector<Order>& reserved,
     std::cout << "\n[승인 대기 주문]\n";
     ConsoleHelper::PrintDivider('-', 40);
     for (const auto& o : reserved)
-        std::cout << "  [" << o.id << "] " << sampleName(o.sample_id, samples)
+        std::cout << "  [" << o.id << "] " << ViewHelper::FindSampleName(o.sample_id, samples)
                   << " x" << o.quantity << "  (" << o.created_at << ")\n";
     ConsoleHelper::PrintDivider('-', 40);
 
