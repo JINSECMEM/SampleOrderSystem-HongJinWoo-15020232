@@ -46,6 +46,7 @@ void AppController::HandleMenu(int choice) {
     case 4: ShowMonitor();                 break;
     case 5: prodCtrl_.ShowProduction();    break;
     case 6: releaseCtrl_.ProcessRelease(); break;
+    case 7: ShowHistory();                 break;
     case 0: running_ = false;              break;
     default:
         std::cout << "\n  잘못된 선택입니다.\n";
@@ -60,8 +61,22 @@ void AppController::ShowMonitor() {
         invSvc_.GetAll(),
         sampleSvc_.FindAll(),
         prodSvc_.GetRunningJob(),
-        prodSvc_.GetQueuedJobs(),
-        eventLog_);
+        prodSvc_.GetQueuedJobs());
+}
+
+void AppController::ShowHistory() {
+    ConsoleHelper::SetColor(ConsoleHelper::COLOR_WHITE);
+    std::cout << "========== 주문/생산/출고 이력 ==========\n";
+    ConsoleHelper::ResetColor();
+    ConsoleHelper::PrintDivider('-', 60);
+    if (eventLog_.empty()) {
+        std::cout << "  이력이 없습니다.\n";
+    } else {
+        for (const auto& log : eventLog_)
+            std::cout << log << '\n';
+    }
+    ConsoleHelper::PrintDivider('=', 60);
+    ConsoleHelper::Pause();
 }
 
 void AppController::Tick() {

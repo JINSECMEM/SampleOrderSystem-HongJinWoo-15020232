@@ -6,8 +6,6 @@
 #include <algorithm>
 #include <unordered_map>
 
-static constexpr int RECENT_LOG_LINES = 5;
-
 static int countByStatus(const std::vector<Order>& orders, OrderStatus status) {
     return static_cast<int>(std::count_if(orders.begin(), orders.end(),
         [status](const Order& o) { return o.status == status; }));
@@ -25,8 +23,7 @@ void MonitorView::Render(const std::vector<Order>& orders,
                           const std::vector<Inventory>& inventories,
                           const std::vector<Sample>& samples,
                           const std::optional<ProductionJob>& running,
-                          const std::vector<ProductionJob>& queued,
-                          const std::vector<std::string>& eventLog) {
+                          const std::vector<ProductionJob>& queued) {
     ConsoleHelper::SetColor(ConsoleHelper::COLOR_WHITE);
     std::cout << "========== 모니터링 대시보드 ==========\n";
     ConsoleHelper::ResetColor();
@@ -75,12 +72,6 @@ void MonitorView::Render(const std::vector<Order>& orders,
                            << " (" << running->elapsed_min << "/" << running->total_time_min << " min)";
     else         std::cout << "유휴";
     std::cout << "  |  대기: " << queued.size() << "건\n";
-
-    std::cout << "\n[이벤트 로그]\n";
-    ConsoleHelper::PrintDivider('-', 60);
-    int start = std::max(0, static_cast<int>(eventLog.size()) - RECENT_LOG_LINES);
-    for (int i = start; i < static_cast<int>(eventLog.size()); ++i)
-        std::cout << eventLog[i] << '\n';
 
     ConsoleHelper::PrintDivider('=', 60);
     ConsoleHelper::Pause();

@@ -13,6 +13,7 @@ void MenuView::Render() {
               << "4. 모니터링\n"
               << "5. 생산 라인\n"
               << "6. 출고 처리\n"
+              << "7. 주문/생산/출고 이력\n"
               << "0. 종료\n";
     ConsoleHelper::PrintDivider();
     std::cout << "메뉴 선택: ";

@@ -28,6 +28,7 @@ public:
 private:
     void HandleMenu(int choice);
     void ShowMonitor();
+    void ShowHistory();
     void Tick();
     void AddLog(const std::string& msg);
 

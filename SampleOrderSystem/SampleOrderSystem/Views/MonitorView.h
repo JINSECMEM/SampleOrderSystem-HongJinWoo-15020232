@@ -14,6 +14,5 @@ public:
                 const std::vector<Inventory>& inventories,
                 const std::vector<Sample>& samples,
                 const std::optional<ProductionJob>& running,
-                const std::vector<ProductionJob>& queued,
-                const std::vector<std::string>& eventLog);
+                const std::vector<ProductionJob>& queued);
 };
