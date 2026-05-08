@@ -44,7 +44,6 @@ void PrintTable(const std::vector<std::string>& headers,
 
 void Pause() {
     std::cout << "\n[Enter] 계속...";
-    std::cin.ignore(1000, '\n');
     std::cin.get();
 }
 
