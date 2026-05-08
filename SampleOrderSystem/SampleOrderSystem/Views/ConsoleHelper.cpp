@@ -44,7 +44,7 @@ void PrintTable(const std::vector<std::string>& headers,
 
 void Pause() {
     std::cout << std::flush;
-    Sleep(1500);
+    Sleep(100);
 }
 
 } // namespace ConsoleHelper

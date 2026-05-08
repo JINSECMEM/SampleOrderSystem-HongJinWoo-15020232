@@ -27,7 +27,6 @@ void MonitorView::Render(const std::vector<Order>& orders,
                           const std::optional<ProductionJob>& running,
                           const std::vector<ProductionJob>& queued,
                           const std::vector<std::string>& eventLog) {
-    ConsoleHelper::ClearScreen();
     ConsoleHelper::SetColor(ConsoleHelper::COLOR_WHITE);
     std::cout << "========== 모니터링 대시보드 ==========\n";
     ConsoleHelper::ResetColor();

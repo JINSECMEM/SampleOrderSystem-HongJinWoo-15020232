@@ -28,7 +28,6 @@ AppController::AppController()
 
 void AppController::Run() {
     while (running_) {
-        ConsoleHelper::ClearScreen();
         menuView_.Render();
         int choice = menuView_.GetChoice();
         HandleMenu(choice);
