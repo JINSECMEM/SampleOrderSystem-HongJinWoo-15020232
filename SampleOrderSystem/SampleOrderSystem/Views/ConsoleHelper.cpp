@@ -43,8 +43,8 @@ void PrintTable(const std::vector<std::string>& headers,
 }
 
 void Pause() {
-    std::cout << "\n다음 명령을 수행하시겠습니까? [Enter]";
-    std::cin.get();
+    std::cout << std::flush;
+    Sleep(1500);
 }
 
 } // namespace ConsoleHelper
