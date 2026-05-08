@@ -73,6 +73,7 @@ TEST(ProductionServiceTest, Tick_CompletionFiresCallback) {
     ProductionJob running;
     running.id = 1; running.order_id = 10; running.sample_id = 2;
     running.target_qty = 5; running.total_time_min = 10; running.elapsed_min = 0;
+    running.start_time = std::time(nullptr) - 10;  // 10초 전에 시작 → elapsed >= total_time_min
     running.status = JobStatus::RUNNING;
 
     EXPECT_CALL(repo, FindRunningJob()).WillOnce(Return(running));
@@ -84,6 +85,6 @@ TEST(ProductionServiceTest, Tick_CompletionFiresCallback) {
         callbackFired = true;
     });
 
-    svc.Tick();  // elapsed_min(0) + TICK_MINUTES(10) >= total_time_min(10) → 완료
+    svc.Tick();  // elapsed = time(now) - start_time(10초전) = 10 >= total_time_min(10) → 완료
     EXPECT_TRUE(callbackFired);
 }

@@ -28,16 +28,19 @@ void ProductionService::Tick() {
     if (!running) {
         auto next = repo_.FindNextQueued();
         if (!next) return;
-        next->status = JobStatus::RUNNING;
+        next->status     = JobStatus::RUNNING;
+        next->start_time = std::time(nullptr);
         repo_.UpdateJob(*next);
         running = next;
     }
 
-    running->elapsed_min += TICK_MINUTES;
+    // 실제 경과 시간(초) = 시뮬레이션 분 (1초 = 1분)
+    running->elapsed_min = static_cast<int>(std::time(nullptr) - running->start_time);
+
     if (running->elapsed_min >= running->total_time_min) {
-        running->produced_qty  = running->target_qty;
-        running->status        = JobStatus::COMPLETED;
-        running->completed_at  = GetTimestamp();
+        running->produced_qty = running->target_qty;
+        running->status       = JobStatus::COMPLETED;
+        running->completed_at = GetTimestamp();
         repo_.UpdateJob(*running);
         if (onComplete_) onComplete_(*running);
     } else {
