@@ -43,7 +43,7 @@ void PrintTable(const std::vector<std::string>& headers,
 }
 
 void Pause() {
-    std::cout << "\n[Enter] 계속...";
+    std::cout << "\n다음 명령을 수행하시겠습니까? [Enter]";
     std::cin.get();
 }
 
