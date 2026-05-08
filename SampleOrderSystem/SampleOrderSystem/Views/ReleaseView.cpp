@@ -1,0 +1,38 @@
+#include "ReleaseView.h"
+#include "ConsoleHelper.h"
+#include <iostream>
+#include <iomanip>
+#include <limits>
+
+static std::string sampleName(int sampleId, const std::vector<Sample>& samples) {
+    for (const auto& s : samples)
+        if (s.id == sampleId) return s.name;
+    return "?";
+}
+
+void ReleaseView::PrintConfirmedOrders(const std::vector<Order>& orders,
+                                        const std::vector<Sample>& samples) {
+    std::cout << "\n[출고 대기 주문 — CONFIRMED]\n";
+    ConsoleHelper::PrintDivider('-', 45);
+    if (orders.empty()) { std::cout << "  출고 대기 주문 없음\n"; return; }
+    std::cout << std::left
+              << std::setw(5)  << "ID"
+              << std::setw(14) << "시료"
+              << std::setw(8)  << "수량"
+              << "승인일시\n";
+    ConsoleHelper::PrintDivider('-', 45);
+    for (const auto& o : orders)
+        std::cout << std::left
+                  << std::setw(5)  << o.id
+                  << std::setw(14) << sampleName(o.sample_id, samples)
+                  << std::setw(8)  << o.quantity
+                  << o.updated_at << '\n';
+    ConsoleHelper::PrintDivider('-', 45);
+}
+
+int ReleaseView::GetOrderIdInput() {
+    std::cout << "출고할 주문 ID 입력: ";
+    int id; std::cin >> id;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    return id;
+}
