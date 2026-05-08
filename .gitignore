@@ -29,3 +29,6 @@ Release/
 
 # File Content Index
 FileContentIndex/
+
+# NuGet packages
+packages/
