@@ -9,4 +9,5 @@ public:
     MOCK_METHOD(std::vector<Order>, FindAll,      (),                  (override));
     MOCK_METHOD(void,               Update,       (const Order&),      (override));
     MOCK_METHOD(std::vector<Order>, FindByStatus, (OrderStatus),       (override));
+    MOCK_METHOD(void,               SaveToFile,   (),                  (const, override));
 };
