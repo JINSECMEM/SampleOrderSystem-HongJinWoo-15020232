@@ -8,6 +8,8 @@ SampleController::SampleController(SampleService& sampleSvc, InventoryService& i
 
 void SampleController::RunMenu() {
     while (true) {
+        std::cout << "\n\n";
+        ConsoleHelper::PrintDivider('=');
         ConsoleHelper::SetColor(ConsoleHelper::COLOR_WHITE);
         std::cout << "===== 시료 관리 =====\n";
         ConsoleHelper::ResetColor();
@@ -57,6 +59,8 @@ void SampleController::Register() {
 
 void SampleController::Search() {
     while (true) {
+        std::cout << "\n\n";
+        ConsoleHelper::PrintDivider('=');
         view_.DisplayList(sampleSvc_.FindAll());
 
         std::cout << "\n[검색 조건 선택]\n"

@@ -28,6 +28,8 @@ AppController::AppController()
 
 void AppController::Run() {
     while (running_) {
+        std::cout << "\n\n";
+        ConsoleHelper::PrintDivider('=');
         menuView_.Render();
         int choice = menuView_.GetChoice();
         HandleMenu(choice);
